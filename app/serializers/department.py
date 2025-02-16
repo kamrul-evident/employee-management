@@ -1,6 +1,6 @@
 from typing import Optional, List
 from pydantic import BaseModel
-from .employee import EmployeeOut
+from .employee import EmployeeList
 
 
 class DepartmentBase(BaseModel):
@@ -8,14 +8,14 @@ class DepartmentBase(BaseModel):
     slug: str
 
 
-class DepartmentCreate(DepartmentBase):
+class DepartmentPost(DepartmentBase):
     pass
 
 
-class DeparmentOut(DepartmentBase):
+class DeparmentList(DepartmentBase):
     id: int
     uid: str
-    employees: List[EmployeeOut] = []
+    employees: List[EmployeeList] = []
 
     class Config:
         orm_mode = True

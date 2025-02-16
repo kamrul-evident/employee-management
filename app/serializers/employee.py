@@ -12,11 +12,11 @@ class EmployeeBase(BaseModel):
     department_id: int
 
 
-class EmployeeCreate(EmployeeBase):
+class EmployeePostSerializer(EmployeeBase):
     pass
 
 
-class EmployeeOut(EmployeeBase):
+class EmployeeList(EmployeeBase):
     id: int
     uid: str
 

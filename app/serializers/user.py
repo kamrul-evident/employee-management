@@ -9,11 +9,11 @@ class UserBase(BaseModel):
     is_admin: bool = False
 
 
-class UserCreate(UserBase):
+class UserPost(UserBase):
     password: str
 
 
-class UserOut(UserBase):
+class UserList(UserBase):
     id: int
     uid: str
 
