@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-engine = create_engine("sqlite:///./test.db")
+engine = create_engine("sqlite:///./emp.db")
 
 
 def get_db():

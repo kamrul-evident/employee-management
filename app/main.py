@@ -7,6 +7,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from app.config.database import Session, get_db
 
+from app.routes.user import user_routes
 
 logger = logging.getLogger("fastapi")
 app = FastAPI(dependencies=[Depends(get_db)])
@@ -29,3 +30,6 @@ def health_check():
     response["database_health"] = "OK" if db.is_active else "disconnected"
 
     return ORJSONResponse(content=response, status_code=HTTPStatus.OK)
+
+# include routers
+app.include_router(user_routes)

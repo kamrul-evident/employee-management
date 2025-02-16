@@ -1,11 +1,14 @@
-from sqlalchemy import Column, String
-from sqlalchemy.orm import relationship
-from models.base import NameSlugDescriptionBaseModel
+# from sqlalchemy import Column, String
+# from sqlalchemy.orm import relationship
+# from .base import NameSlugDescriptionBaseModel
 
 
-class Department(NameSlugDescriptionBaseModel):
-    __tablename__ = "departments"
-    employees = relationship("Employee", backref="department", lazy="dynamic")
+# # Department Model
+# class Department(NameSlugDescriptionBaseModel):
+#     __tablename__ = "departments"
+    
+#     # Remove the 'employees' backref here, since it's already set in the Employee model
+#     employees = relationship("Employee", lazy="dynamic", backref="department")
 
-    def __repr__(self):
-        return f"<Department {self.name}>"
+#     def __repr__(self):
+#         return f"<Department {self.name}>"

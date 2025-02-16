@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String, Integer, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 from passlib.context import CryptContext
-from models.base import (
+from .base import (
     BaseModelWithUUID,
 )  # Assuming the base model is in app/models/base.py
 
@@ -10,22 +10,15 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 class User(BaseModelWithUUID):
-    __tablename__ = "users"  # Define the name of the table
+    __tablename__ = "users"
 
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
-    is_active = Column(
-        Boolean, default=True
-    )  # User's active status (can be False for deactivated users)
-    is_admin = Column(
-        Boolean, default=False
-    )  # User's admin status (can be True for admin users)
-    role = Column(String, default="employee")  # User's role (e.g., employee, admin)
+    is_active = Column(Boolean, default=True)
+    is_admin = Column(Boolean, default=False)
+    role = Column(String, default="employee")
 
-    # Relationship with the Employee model
-    employee = relationship(
-        "Employee", backref="user", uselist=False
-    )  # One-to-one relationship with Employee
+    # Not every User has to be an Employee, so no backref on the User side
 
     def __repr__(self):
         return f"<User {self.email}> Role: {self.role}"
