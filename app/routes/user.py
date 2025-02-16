@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, Request
+from sqlalchemy.orm import Session
 from app.config.database import get_db
-from app.serializers.user import UserList, UserPost
+from app.serializers.user import UserOut, UserPost, UserList
 
-from app.controllers.user import create_user
+from app.controllers.user import create_user, user_list
 
 router = APIRouter(
     prefix="/users",
@@ -11,9 +12,9 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=UserList)
-async def read_users(request: Request):
-    return {"message": "Hello World"}
+@router.get("/", tags=["users"])
+async def get_users(db: Session = Depends(get_db)):
+    return await user_list(db)
 
 
 @router.post("/", tags=["users"])
