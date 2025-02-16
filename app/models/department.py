@@ -6,7 +6,7 @@
 # # Department Model
 # class Department(NameSlugDescriptionBaseModel):
 #     __tablename__ = "departments"
-    
+
 #     # Remove the 'employees' backref here, since it's already set in the Employee model
 #     employees = relationship("Employee", lazy="dynamic", backref="department")
 

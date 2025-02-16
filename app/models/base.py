@@ -1,7 +1,7 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import validates
+from sqlalchemy.orm import relationship, validates
 import uuid
 from slugify import slugify
 
@@ -9,7 +9,7 @@ from slugify import slugify
 Base = declarative_base()
 
 
-# Define the abstract base class
+# Define the abstract base class with UUID and timestamps
 class BaseModelWithUUID(Base):
     __tablename__ = "base_model"
     __abstract__ = True
@@ -22,6 +22,7 @@ class BaseModelWithUUID(Base):
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
 
 
+# Base model with name, slug, and description
 class NameSlugDescriptionBaseModel(BaseModelWithUUID):
     __abstract__ = True
 
@@ -31,5 +32,6 @@ class NameSlugDescriptionBaseModel(BaseModelWithUUID):
 
     @validates("name")
     def update_slug(self, key, name):
+        """Automatically generate a slug when name is set"""
         self.slug = slugify(name)
-        return name  # Make sure to return the name to complete the validation chain
+        return name  # Return name to maintain validation chain
