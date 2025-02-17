@@ -1,21 +1,23 @@
-# from typing import Optional, List
-# from pydantic import BaseModel
-# from .employee import EmployeeList
+from typing import Optional, List
+from datetime import datetime
+from pydantic import BaseModel
 
 
-# class DepartmentBase(BaseModel):
-#     name: str
-#     slug: str
+class DepartmentBase(BaseModel):
+    name: str
 
 
-# class DepartmentPost(DepartmentBase):
-#     pass
+class DepartmentPost(DepartmentBase):
+    description: str
 
 
-# class DeparmentList(DepartmentBase):
-#     id: int
-#     uid: str
-#     employees: List[EmployeeList] = []
+class DeparmentResponse(DepartmentBase):
+    id: int
+    uid: str
+    slug: str
+    description: str
+    created_at: datetime
+    updated_at: datetime
 
-#     class Config:
-#         orm_mode = True
+    class Config:
+        orm_mode = True

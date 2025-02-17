@@ -33,5 +33,7 @@ class NameSlugDescriptionBaseModel(BaseModelWithUUID):
     @validates("name")
     def update_slug(self, key, name):
         """Automatically generate a slug when name is set"""
+        print("slugify in Name slug description. Key", key)
+        print("slugify in Name slug description. name", name)
         self.slug = slugify(name)
         return name  # Return name to maintain validation chain
