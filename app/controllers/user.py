@@ -1,12 +1,13 @@
 from http import HTTPStatus
 
+from fastapi import HTTPException
 from fastapi.responses import ORJSONResponse
 from pydantic import ValidationError
 from sqlalchemy.orm import Session, defer
-import orjson
+from uuid import UUID
 
 from app.models.user import User
-from app.serializers.user import UserBase, UserPost, UserList
+from app.serializers.user import UserBase, UserPost, UserResponse
 
 
 async def create_user(payload: UserPost, db: Session):
@@ -29,15 +30,7 @@ async def create_user(payload: UserPost, db: Session):
         db.commit()
         db.refresh(user)
 
-        return ORJSONResponse(
-            content={
-                "uid": user.uid,
-                "email": user.email,
-                "role": user.role,
-                "created_at": user.created_at,
-            },
-            status_code=HTTPStatus.CREATED,
-        )
+        return user
 
     except ValidationError as e:
         return ORJSONResponse(
@@ -46,5 +39,36 @@ async def create_user(payload: UserPost, db: Session):
 
 
 async def user_list(db: Session):
-    users = db.query(User).all()
-    return {"users": users}
+    return db.query(User).all()
+
+
+async def get_user_by_uid(id: int, db: Session):
+    user = db.query(User).filter(User.id == id).first()
+
+    if not user:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="User not found.")
+    return user
+
+
+async def update_user_controller(id: int, payload: UserPost, db: Session):
+    user = db.query(User).filter(User.id == id).first()
+    if user is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="User not found.")
+
+    user.email = payload.email
+    user.role = payload.role
+    user.is_active = payload.is_active
+    user.is_admin = payload.is_admin
+    db.commit()
+    db.refresh(user)
+
+    return user
+
+
+async def delete_user_controller(id: int, db: Session):
+    user = db.query(User).filter(User.id == id).first()
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    db.delete(user)
+    db.commit()
+    return {"message": "User deleted successfully"}

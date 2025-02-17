@@ -1,5 +1,6 @@
 from typing import Optional, List
 from pydantic import BaseModel
+from uuid import UUID
 
 
 class UserBase(BaseModel):
@@ -17,17 +18,10 @@ class UserPost(UserBase):
     password: str
 
 
-class UserOut(UserBase):
+class UserResponse(UserBase):
     id: int
-    uid: str
+    uid: UUID
 
     class Config:
         orm_mode = True
-
-
-class UserList(UserBase):
-    users: List[UserBase]
-
-    class Config:
-        orm_mode = True
-        from_attributes = True
+        from_aatributes = True
