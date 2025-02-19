@@ -71,8 +71,8 @@ async def get_single_employee_controller(id: int, db: Session):
         phone=employee.phone,
         department_id=employee.department_id,
         job_title=employee.job_title,
-        department=DeparmentResponse.from_orm(emp_department),
-        user=UserResponse.from_orm(user),
+        department=DeparmentResponse.model_validate(emp_department),
+        user=UserResponse.model_validate(user),
     )
 
 
