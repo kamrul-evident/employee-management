@@ -3,7 +3,12 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 from app.config.database import get_db
-from app.serializers.employee import EmployeeResponse, EmployeePost, EmployeeUpdate
+from app.serializers.employee import (
+    EmployeeResponse,
+    EmployeePost,
+    EmployeeUpdate,
+    EmployeeDetail,
+)
 
 from app.controllers.employee import (
     employee_list_controller,
@@ -30,7 +35,7 @@ async def create_department(payload: EmployeePost, db: Session = Depends(get_db)
     return await create_employee_controller(payload, db)
 
 
-@router.get("/{id}", tags=["employee"], response_model=EmployeeResponse)
+@router.get("/{id}", tags=["employee"], response_model=EmployeeDetail)
 async def get_single_employee(id: int, db: Session = Depends(get_db)):
     return await get_single_employee_controller(id, db)
 

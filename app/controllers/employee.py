@@ -9,7 +9,10 @@ from uuid import UUID
 
 from app.models.employee import Employee
 from app.models.user import User
-from app.serializers.employee import EmployeePost, EmployeeUpdate
+from app.models.department import Department
+from app.serializers.employee import EmployeePost, EmployeeUpdate, EmployeeDetail
+from app.serializers.department import DeparmentResponse
+from app.serializers.user import UserResponse
 
 
 async def employee_list_controller(db: Session):
@@ -54,7 +57,23 @@ async def get_single_employee_controller(id: int, db: Session):
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND, detail="Employee not found."
         )
-    return employee
+    # Ensure related user and department are loaded, then return the response
+    user = db.query(User).filter(User.id == employee.user_id).first()
+    emp_department = (
+        db.query(Department).filter(Department.id == employee.department_id).first()
+    )
+    return EmployeeDetail(
+        id=employee.id,
+        uid=employee.uid,
+        first_name=employee.first_name,
+        last_name=employee.last_name,
+        email=employee.email,
+        phone=employee.phone,
+        department_id=employee.department_id,
+        job_title=employee.job_title,
+        department=DeparmentResponse.from_orm(emp_department),
+        user=UserResponse.from_orm(user),
+    )
 
 
 async def update_employee_controller(id: int, payload: EmployeeUpdate, db: Session):

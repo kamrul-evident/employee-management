@@ -1,6 +1,8 @@
 from typing import Optional
 
 from pydantic import BaseModel
+from app.serializers.user import UserResponse
+from app.serializers.department import DeparmentResponse
 
 
 class EmployeeBase(BaseModel):
@@ -27,3 +29,14 @@ class EmployeeResponse(EmployeeBase):
 
     class Config:
         orm_mode = True
+
+
+class EmployeeDetail(EmployeeBase):
+    id: int
+    uid: str
+    user: UserResponse
+    department: DeparmentResponse
+
+    class Config:
+        orm_mode = True
+        from_attributes = True
