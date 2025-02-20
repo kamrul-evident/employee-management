@@ -10,6 +10,9 @@ from app.config.database import Session, get_db
 from app.routes.user import user_routes
 from app.routes.department import department_routes
 from app.routes.employee import employee_routes
+from app.routes.auth import auth_router
+
+from app.utils.auth import get_current_user
 
 logger = logging.getLogger("fastapi")
 app = FastAPI(dependencies=[Depends(get_db)])
@@ -34,7 +37,14 @@ def health_check():
     return ORJSONResponse(content=response, status_code=HTTPStatus.OK)
 
 
+@app.get("/private")
+async def private_route(current_user: dict = Depends(get_current_user)):
+    """A private route that requires authentication."""
+    return {"message": "This is a private route.", "user": current_user}
+
+
 # include routers
+app.include_router(auth_router)
 app.include_router(user_routes)
 app.include_router(department_routes)
 app.include_router(employee_routes)
