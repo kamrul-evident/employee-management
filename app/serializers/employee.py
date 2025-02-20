@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 from app.serializers.user import UserResponse
-from app.serializers.department import DeparmentResponse
+from app.serializers.department import DepartmentResponse
 
 
 class EmployeeBase(BaseModel):
@@ -35,7 +35,7 @@ class EmployeeDetail(EmployeeBase):
     id: int
     uid: str
     user: UserResponse
-    department: DeparmentResponse
+    department: DepartmentResponse
 
     class Config:
         orm_mode = True

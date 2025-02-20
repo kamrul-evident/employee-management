@@ -11,7 +11,7 @@ from app.models.employee import Employee
 from app.models.user import User
 from app.models.department import Department
 from app.serializers.employee import EmployeePost, EmployeeUpdate, EmployeeDetail
-from app.serializers.department import DeparmentResponse
+from app.serializers.department import DepartmentResponse
 from app.serializers.user import UserResponse
 
 
@@ -52,16 +52,30 @@ async def create_employee_controller(payload: EmployeePost, db: Session):
 
 
 async def get_single_employee_controller(id: int, db: Session):
-    employee = db.query(Employee).filter(Employee.id == id).first()
-    if not employee:
-        raise HTTPException(
-            status_code=HTTPStatus.NOT_FOUND, detail="Employee not found."
-        )
-    # Ensure related user and department are loaded, then return the response
-    user = db.query(User).filter(User.id == employee.user_id).first()
-    emp_department = (
-        db.query(Department).filter(Department.id == employee.department_id).first()
+    employee_query = (
+        db.query(Employee, User, Department)
+        .join(User, User.id == Employee.user_id, isouter=True)
+        .join(Department, Department.id == Employee.department_id, isouter=True)
+        .filter(Employee.id == id)
+        .first()
     )
+    if not employee_query:
+        raise HTTPException(
+            status_code=HTTPStatus.NOT_FOUND, detail="Employee not found"
+        )
+    # Unpack the query results
+    employee, user, department = employee_query
+    # employee = db.query(Employee).filter(Employee.id == id).first()
+    # if not employee:
+    #     raise HTTPException(
+    #         status_code=HTTPStatus.NOT_FOUND, detail="Employee not found."
+    #     )
+    # # Ensure related user and department are loaded, then return the response
+    # user = db.query(User).filter(User.id == employee.user_id).first()
+    # emp_department = (
+    #     db.query(Department).filter(Department.id == employee.department_id).first()
+    # )
+    # Return the detailed response
     return EmployeeDetail(
         id=employee.id,
         uid=employee.uid,
@@ -71,7 +85,7 @@ async def get_single_employee_controller(id: int, db: Session):
         phone=employee.phone,
         department_id=employee.department_id,
         job_title=employee.job_title,
-        department=DeparmentResponse.model_validate(emp_department),
+        department=DepartmentResponse.model_validate(department),
         user=UserResponse.model_validate(user),
     )
 

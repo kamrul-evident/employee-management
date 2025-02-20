@@ -11,7 +11,7 @@ class DepartmentPost(DepartmentBase):
     description: str
 
 
-class DeparmentResponse(DepartmentBase):
+class DepartmentResponse(DepartmentBase):
     id: int
     uid: str
     slug: str
