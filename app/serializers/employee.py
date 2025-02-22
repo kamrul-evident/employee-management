@@ -28,7 +28,7 @@ class EmployeeResponse(EmployeeBase):
     user_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class EmployeeDetail(EmployeeBase):
@@ -38,5 +38,4 @@ class EmployeeDetail(EmployeeBase):
     department: DepartmentResponse
 
     class Config:
-        orm_mode = True
         from_attributes = True

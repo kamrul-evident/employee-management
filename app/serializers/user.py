@@ -10,7 +10,6 @@ class UserBase(BaseModel):
     is_admin: bool = False
 
     class Config:
-        orm_mode = True
         from_attributes = True
 
 
@@ -23,5 +22,4 @@ class UserResponse(UserBase):
     uid: UUID
 
     class Config:
-        orm_mode = True
         from_aatributes = True
