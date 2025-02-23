@@ -12,6 +12,7 @@ from app.routes.department import department_routes
 from app.routes.employee import employee_routes
 from app.routes.auth import auth_router
 
+from app.middlewares.auth import AuthMiddleware
 from app.utils.auth import get_current_user
 
 logger = logging.getLogger("fastapi")
@@ -24,6 +25,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Add auth middleware to the app
+app.add_middleware(AuthMiddleware)
 
 
 @app.get("/")

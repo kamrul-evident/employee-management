@@ -8,7 +8,7 @@ def utc_now():
 
 
 SECRET_KEY = "58d83fab2b8543f4fffad3e5d2840b1103ddf84d6d8a1e47e0ff972bf5626921"
-ALGORITHOM = "HS256"
+ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
@@ -22,7 +22,7 @@ def create_access_token(data: Dict, expires_delta: Optional[timedelta] = None) -
 
     to_encode.update({"exp": expire})
 
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHOM)
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
     return encoded_jwt
 
@@ -30,7 +30,7 @@ def create_access_token(data: Dict, expires_delta: Optional[timedelta] = None) -
 def verify_access_token(token: str) -> Dict:
     """Decode the JWT token and return the payload (user data)."""
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHOM])
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
     except jwt.PyJWTError:
         raise Exception("Invalid token or expired token")
