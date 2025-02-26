@@ -16,6 +16,10 @@ class UserBase(BaseModel):
 class UserPost(UserBase):
     password: str
 
+class UserUpdate(BaseModel):
+    email: Optional[str] = None
+    role: Optional[str] = None
+    is_active: Optional[bool] = None
 
 class UserResponse(UserBase):
     id: int
